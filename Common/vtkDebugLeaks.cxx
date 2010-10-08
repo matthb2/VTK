@@ -306,6 +306,30 @@ void vtkDebugLeaks::DestructClass(const char*)
 #endif
 
 //----------------------------------------------------------------------------
+void vtkDebugLeaks::SetDebugLeaksObserver(vtkDebugLeaksObserver* observer)
+{
+  vtkDebugLeaks::Observer = observer;
+}
+
+//----------------------------------------------------------------------------
+void vtkDebugLeaks::ObjectConstructed(vtkObjectBase* object)
+{
+  if (vtkDebugLeaks::Observer)
+    {
+    vtkDebugLeaks::Observer->ObjectConstructed(object);
+    }
+}
+
+//----------------------------------------------------------------------------
+void vtkDebugLeaks::ObjectDestroyed(vtkObjectBase* object)
+{
+  if (vtkDebugLeaks::Observer)
+    {
+    vtkDebugLeaks::Observer->ObjectDestroyed(object);
+    }
+}
+
+//----------------------------------------------------------------------------
 int vtkDebugLeaks::PrintCurrentLeaks()
 {
 #ifdef VTK_DEBUG_LEAKS
@@ -415,10 +439,12 @@ void vtkDebugLeaks::ClassInitialize()
   vtkDebugLeaks::ExitError =
     (getenv("DASHBOARD_TEST_FROM_CTEST") ||
      getenv("DART_TEST_FROM_DART"))? 1:0;
+  vtkDebugLeaks::Observer = 0;
 #else
   vtkDebugLeaks::MemoryTable = 0;
   vtkDebugLeaks::CriticalSection = 0;
   vtkDebugLeaks::ExitError = 0;
+  vtkDebugLeaks::Observer = 0;
 #endif
 }
 
@@ -460,3 +486,5 @@ vtkSimpleCriticalSection* vtkDebugLeaks::CriticalSection;
 
 // Purposely not initialized.  ClassInitialize will handle it.
 int vtkDebugLeaks::ExitError;
+
+vtkDebugLeaksObserver* vtkDebugLeaks::Observer;

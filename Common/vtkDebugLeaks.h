@@ -34,6 +34,14 @@
 class vtkDebugLeaksHashTable;
 class vtkSimpleCriticalSection;
 
+//BTX
+class VTK_COMMON_EXPORT vtkDebugLeaksObserver {
+public:
+  virtual void ObjectConstructed(vtkObjectBase*) {};
+  virtual void ObjectDestroyed(vtkObjectBase*) {};
+};
+//ETX
+
 class VTK_COMMON_EXPORT vtkDebugLeaks : public vtkObject
 {
 public: 
@@ -43,10 +51,12 @@ public:
   // Description:
   // Call this when creating a class of a given name.
   static void ConstructClass(const char* classname);
+  static void ObjectConstructed(vtkObjectBase* object);
 
   // Description:
   // Call this when deleting a class of a given name.
   static void DestructClass(const char* classname);
+  static void ObjectDestroyed(vtkObjectBase* object);
 
   // Description:
   // Print all the values in the table.  Returns non-zero if there
@@ -64,6 +74,9 @@ public:
   // Default is on when testing and off otherwise.
   static int GetExitError();
   static void SetExitError(int);
+  //BTX
+  static void SetDebugLeaksObserver(vtkDebugLeaksObserver* observer);
+  //ETX
 
 protected:
   vtkDebugLeaks(){}; 
@@ -81,6 +94,7 @@ protected:
 private:
   static vtkDebugLeaksHashTable* MemoryTable;
   static vtkSimpleCriticalSection* CriticalSection;
+  static vtkDebugLeaksObserver* Observer;
   static int ExitError;
 
   vtkDebugLeaks(const vtkDebugLeaks&);  // Not implemented.
