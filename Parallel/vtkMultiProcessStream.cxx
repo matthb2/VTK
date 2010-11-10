@@ -82,6 +82,13 @@ public:
       case uchar_value:
         wordSize = sizeof(char);
         break;
+
+      case string_value:
+        while (*iter != 0x0)
+          {
+          iter++;
+          }
+        break;
         }
 
       switch (wordSize)
