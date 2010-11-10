@@ -36,7 +36,8 @@ public:
 
   // Description:
   // Close the socket.
-  void CloseSocket() {this->CloseSocket(this->SocketDescriptor);}
+  void CloseSocket() {this->CloseSocket(this->SocketDescriptor);
+                      this->SocketDescriptor = -1;}
  
   // ------ Communication API ---
   // Description:
