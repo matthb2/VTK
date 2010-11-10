@@ -334,6 +334,13 @@ vtkMPIController *vtkMPIController::PartitionController(int localColor,
     return NULL;
     }
 
+  // It is possible to specify a color such that this process
+  // does not belong to any of the created partitions.
+  if (*(subcomm->GetMPIComm()->Handle) == MPI_COMM_NULL)
+    {
+    return NULL;
+    }
+
   vtkMPIController *controller = vtkMPIController::New();
   controller->SetCommunicator(subcomm);
   return controller;

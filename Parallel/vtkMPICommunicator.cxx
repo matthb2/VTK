@@ -378,6 +378,11 @@ vtkMPICommunicator* vtkMPICommunicator::GetWorldCommunicator()
   return vtkMPICommunicator::WorldCommunicator;
 }
 
+int vtkMPICommunicator::GetMPIUndefined()
+{
+  return MPI_UNDEFINED;
+}
+
 //----------------------------------------------------------------------------
 void vtkMPICommunicator::PrintSelf(ostream& os, vtkIndent indent)
 {
@@ -581,6 +586,11 @@ int vtkMPICommunicator::SplitInitialize(vtkCommunicator *oldcomm,
     return 0;
     }
 
+  if (color == vtkMultiProcessController::NO_PARTITION)
+    {
+    color = MPI_UNDEFINED;
+    }
+
   this->KeepHandleOff();
 
   this->MPIComm->Handle = new MPI_Comm;
@@ -599,8 +609,12 @@ int vtkMPICommunicator::SplitInitialize(vtkCommunicator *oldcomm,
     return 0;
     }
 
-  this->InitializeNumberOfProcesses();
-  this->Initialized = 1;
+  // If color was MPI_UNDEFINED then this processes will have a null comm
+  if (*(this->MPIComm->Handle) != MPI_COMM_NULL)
+    {
+    this->InitializeNumberOfProcesses();
+    this->Initialized = 1;
+    }
 
   this->Modified();
 

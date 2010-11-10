@@ -285,7 +285,8 @@ public:
   enum Consts 
   {
     ANY_SOURCE     = -1,
-    INVALID_SOURCE = -2
+    INVALID_SOURCE = -2,
+    NO_PARTITION    = -3
   };
 
   enum Tags 

@@ -344,6 +344,7 @@ vtkMultiProcessController *vtkMultiProcessController::PartitionController(
     {
     if (inPartition[i]) continue;
     int targetColor = allColors[i];
+    if (targetColor == NO_PARTITION) continue;
     vtkstd::list<int> partitionIds;     // Make sorted list, then put in group.
     for (int j = i; j < numProc; j++)
       {

@@ -74,6 +74,7 @@ public:
   // communicator (MPI_COMM_WORLD)
   static vtkMPICommunicator* GetWorldCommunicator();
   
+  static int GetMPIUndefined();
 
   // Description:
   // Used to initialize the communicator (i.e. create the underlying MPI_Comm).
