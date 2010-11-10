@@ -349,6 +349,13 @@ int vtkSocket::Send(const void* data, int length)
     if(n < 0)
       {
       vtkErrorMacro("Socket Error: Send failed.");
+
+      int errorNumber = errno;
+      if (errorNumber == ECONNRESET || errorNumber == EPIPE)
+        {
+        this->CloseSocket();
+        }
+
       return 0;
       }
     total += n;
