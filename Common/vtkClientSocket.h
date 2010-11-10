@@ -30,6 +30,12 @@ public:
   // Description:
   // Connects to host. Returns 0 on success, -1 on error.
   int ConnectToServer(const char* hostname, int port); 
+
+  // Description:
+  // Connects to host.  Returns 0 on success, -1 on error.  If silenceError
+  // is true, this method will not print an error message if the connection
+  // to hostname:port fails.
+  int ConnectToServer(const char* hostname, int port, bool silenceError);
  
   // Description:
   // Returns if the socket is on the connecting side (the side that requests a

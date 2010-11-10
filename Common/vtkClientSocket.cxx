@@ -31,6 +31,12 @@ vtkClientSocket::~vtkClientSocket()
 //-----------------------------------------------------------------------------
 int vtkClientSocket::ConnectToServer(const char* hostName, int port)
 {
+  return this->ConnectToServer(hostName, port, /*silenceError=*/false);
+}
+
+//-----------------------------------------------------------------------------
+int vtkClientSocket::ConnectToServer(const char* hostName, int port, bool silenceError)
+{
   if (this->SocketDescriptor != -1)
     {
     vtkWarningMacro("Client connection already exists. Closing it.");
@@ -49,8 +55,10 @@ int vtkClientSocket::ConnectToServer(const char* hostName, int port)
     {
     this->CloseSocket(this->SocketDescriptor);
     this->SocketDescriptor = -1;
-
-    vtkErrorMacro("Failed to connect to server " << hostName << ":" << port);
+    if (!silenceError)
+      {
+      vtkErrorMacro("Failed to connect to server " << hostName << ":" << port);
+      }
     return -1;
     }
 
